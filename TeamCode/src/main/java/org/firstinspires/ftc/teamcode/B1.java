@@ -456,7 +456,7 @@ public class B1 extends CommonClass {
 
     //----------------------------------------------------------------------------------------------
 
-    public void encoderDrive(double speed,
+    /*public void encoderDrive(double speed,
                              double leftInches, double rightInches,
                              double timeoutS) {
         int newFLTarget;
@@ -527,6 +527,7 @@ public class B1 extends CommonClass {
             //  sleep(250);   // optional pause after each move
         }
     }
+    */
 
     //----------------------------------------------------------------------------------------------
 
