@@ -30,7 +30,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -71,14 +74,19 @@ public class Comp_Hardware
     public Servo    LJS  = null;
     public Servo    RJS  = null;
 
-    public CRServo  RelicLift = null;
+    public Servo  RelicLift = null;
     public Servo    RelicGrab = null;
 
-    //public Servo    GTS  = null;
-    //public Servo    OGTS = null;
+    public Servo    GTS  = null;
+    public Servo    OGTS = null;
 
     public final double LJS_UP = 0.12;
     public final double RJS_UP = 1;
+
+    ColorSensor JSCL;
+    DistanceSensor JSDL;
+
+    DigitalChannel digIn;                // Device Object
 
 
     //public static final double MID_SERVO       =  0.5 ;
@@ -106,6 +114,7 @@ public class Comp_Hardware
         BR = hwMap.get(DcMotor.class, "BR");
 
         LiftMotor  = hwMap.get(DcMotor.class, "LM");
+        LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         RelicMotor = hwMap.get(DcMotor.class, "RA");
 
@@ -117,11 +126,15 @@ public class Comp_Hardware
         LJS = hwMap.get(Servo.class, "LJS");
         RJS = hwMap.get(Servo.class, "RJS");
 
-        RelicLift = hwMap.get(CRServo.class, "RL");
-        RelicGrab = hwMap.get(Servo.class, "RG");
+        GTS = hwMap.get(Servo.class, "GTS");
+        OGTS = hwMap.get(Servo.class, "OGTS");
 
-        //GTS = hwMap.get(Servo.class, "GTS");
-        //OGTS = hwMap.get(Servo.class, "OGTS");
+        JSCL = hwMap.get(ColorSensor.class, "CDSL");
+        JSDL = hwMap.get(DistanceSensor.class, "CDSL");
+
+        digIn  = hwMap.get(DigitalChannel.class, "digin");     //  Use generic form of device mapping
+        digIn.setMode(DigitalChannel.Mode.INPUT);          // Set the direction of each channel
+
 
         FL.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         FR.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
@@ -160,6 +173,8 @@ public class Comp_Hardware
         BLC.setPosition(1);
         TRC.setPosition(0.72);
         BRC.setPosition(0.4);
+
+        OGTS.setPosition(0.7);
     }
  }
 

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -23,21 +24,18 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
         double drive;
         double turn;
         double max;
-        double LiftMotor;
+        double LiftMotor = 0;
         double Motor;
         double Liftmax;
         double RelicMotor;
         double RelicLift = 0;
 
-        robot.RelicLift =  hardwareMap.crservo.get("RL");
 
-        /*
-        RJS = hardwareMap.servo.get("RJS");
-        LJS = hardwareMap.servo.get("LJS");
+        boolean buttonState = false;
 
-        GTS = hardwareMap.servo.get("GTS");
-        OGTS =hardwareMap.servo.get("OGTS");
-        */
+
+        //RJS = hardwareMap.servo.get("RJS");
+        //LJS = hardwareMap.servo.get("LJS");
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -60,7 +58,16 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
             BL  = gamepad1.left_stick_y - gamepad1.left_stick_x;
             BR  = gamepad1.left_stick_y + gamepad1.left_stick_x;
 
-            LiftMotor = gamepad2.left_stick_y;
+
+            if (!robot.digIn .getState() && gamepad2.left_stick_y >= 0) {
+                LiftMotor = 0;
+                robot.LiftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            }
+            else{
+                LiftMotor = gamepad2.left_stick_y;
+            }
+
+
 
             RelicMotor = gamepad1.right_stick_y;
 
@@ -121,7 +128,20 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
             }
 
 
-            if (gamepad2.a){            //Middle pos
+            if (gamepad2.right_bumper && gamepad2.b) {
+                buttonState = true;
+            }
+
+            if (buttonState && robot.LiftMotor.getCurrentPosition() <= 20){//change to target {
+                LiftMotor = -1;
+            }
+            else if (buttonState && robot.LiftMotor.getCurrentPosition() >= 20){
+                buttonState = false;
+                LiftMotor = 0;
+            }
+
+
+            if (!gamepad2.right_bumper && gamepad2.a){            //Middle pos
                 robot.TLC.setPosition(0.675);
                 robot.BLC.setPosition(0.52);
                 robot.TRC.setPosition(0.28);
@@ -146,12 +166,12 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
                 robot.BRC.setPosition(0.7);
             }
 
-            if (gamepad1.x){
+            /*if (gamepad1.x){
                 robot.RelicGrab.setPosition(1);
             }
             if (gamepad1.a){
                 robot.RelicGrab.setPosition(0.5);
-            }
+            }*/
 
             if (gamepad2.right_bumper){
                 RelicLift = gamepad2.right_stick_y;
@@ -160,25 +180,23 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
 
 
 
-
-            /*
-            if (gamepad1.a){
-                robot.GTS.setPosition(1);
-            }
-            if (gamepad1.b){
+            if (gamepad1.dpad_up){
                 robot.GTS.setPosition(0.5);
+            }
+            if (gamepad1.dpad_down){
+                robot.GTS.setPosition(0);
             }
 
             if (gamepad1.x){
-                OGTS.setPosition(0.1);
+                robot.OGTS.setPosition(0.615);
             }
             else if (gamepad1.b){
-                OGTS.setPosition(0.9);
+                robot.OGTS.setPosition(0.7);
             }
             else if (gamepad1.a){
-                OGTS.setPosition(0.5);
+                robot.OGTS.setPosition(0.66);
             }
-            */
+
 
 
             // Output the safe vales to the motor drives.
@@ -190,13 +208,13 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
             robot.LiftMotor.setPower(LiftMotor);
 
             robot.RelicMotor.setPower(RelicMotor);
-            
-            robot.RelicLift.setPower(RelicLift);
+
 
             // Send telemetry message to signify robot running;
-            telemetry.addData("left",  "%.2f", FL);
+            telemetry.addData("left", "%.2f", FL);
             telemetry.addData("right", "%.2f", FR);
             telemetry.update();
+
 
             // Pace this loop so jaw action is reasonable speed.
             sleep(50);
