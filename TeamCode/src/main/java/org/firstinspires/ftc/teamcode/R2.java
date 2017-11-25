@@ -217,22 +217,22 @@ public class R2 extends CommonClass {
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
-        robot.FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.flMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.blMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.brMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         relicTrackables.activate();
         composeTelemetry();
 
         // Wait for the game to start (driver presses PLAY)
-        telemetry.addData(">", "Ready to kick a$$");
+        telemetry.addData(">", "Ready for Battle Sir");
         telemetry.update();
         waitForStart();
         //------------------------------------------------------------------------------------------
@@ -258,7 +258,7 @@ public class R2 extends CommonClass {
 
                 ClampandLift(0.25, 1000);
 
-                robot.RJS.setPosition(RJS_down);
+                robot.rJewelServo.setPosition(RJS_down);
                 sleep(250);
                 telemetry.addData("Blue", JSCR.blue());
                 telemetry.addData("Red", JSCR.red());
@@ -272,14 +272,14 @@ public class R2 extends CommonClass {
                     telemetry.addData("Blue", "Seen");
                     telemetry.update();
                     encoderDrive(0.1, -3.5, -3.5, 10);
-                    robot.RJS.setPosition(RJS_up);
+                    robot.rJewelServo.setPosition(RJS_up);
                     encoderDrive(0.1, 3.5, 3.5, 10);
                 }
                 else if (RED) {
                     telemetry.addData("Red", "Seen");
                     telemetry.update();
                     encoderDrive(0.1, 3.5, 3.5, 10);
-                    robot.RJS.setPosition(RJS_up);
+                    robot.rJewelServo.setPosition(RJS_up);
                     encoderDrive(0.1, -3.5, -3.5, 10);
                 }
                 else {
@@ -305,7 +305,7 @@ public class R2 extends CommonClass {
 
                 ClampandLift(0.25, 1000);
 
-                robot.RJS.setPosition(RJS_down);
+                robot.rJewelServo.setPosition(RJS_down);
                 sleep(250);
                 telemetry.addData("Blue", JSCR.blue());
                 telemetry.addData("Red", JSCR.red());
@@ -319,14 +319,14 @@ public class R2 extends CommonClass {
                     telemetry.addData("Blue", "Seen");
                     telemetry.update();
                     encoderDrive(0.1, -3.5, -3.5, 10);
-                    robot.RJS.setPosition(RJS_up);
+                    robot.rJewelServo.setPosition(RJS_up);
                     encoderDrive(0.1, 3.5, 3.5, 10);
                 }
                 else if (RED) {
                     telemetry.addData("Red", "Seen");
                     telemetry.update();
                     encoderDrive(0.1, 3.5, 3.5, 10);
-                    robot.RJS.setPosition(RJS_up);
+                    robot.rJewelServo.setPosition(RJS_up);
                     encoderDrive(0.1, -3.5, -3.5, 10);
                 }
                 else {
@@ -352,7 +352,7 @@ public class R2 extends CommonClass {
 
                 ClampandLift(0.25, 1000);
 
-                robot.RJS.setPosition(RJS_down);
+                robot.rJewelServo.setPosition(RJS_down);
                 sleep(250);
                 telemetry.addData("Blue", JSCR.blue());
                 telemetry.addData("Red", JSCR.red());
@@ -366,14 +366,14 @@ public class R2 extends CommonClass {
                     telemetry.addData("Blue", "Seen");
                     telemetry.update();
                     encoderDrive(0.1, -3.5, -3.5, 10);
-                    robot.RJS.setPosition(RJS_up);
+                    robot.rJewelServo.setPosition(RJS_up);
                     encoderDrive(0.1, 3.5, 3.5, 10);
                 }
                 else if (RED) {
                     telemetry.addData("Red", "Seen");
                     telemetry.update();
                     encoderDrive(0.1, 3.5, 3.5, 10);
-                    robot.RJS.setPosition(RJS_up);
+                    robot.rJewelServo.setPosition(RJS_up);
                     encoderDrive(0.1, -3.5, -3.5, 10);
                 }
                 else {

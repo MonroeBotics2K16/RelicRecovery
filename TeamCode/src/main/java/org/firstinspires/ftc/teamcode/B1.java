@@ -1,32 +1,3 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -55,47 +26,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.Locale;
 
-/**
- * This file illustrates the concept of driving a path based on encoder counts.
- * It uses the common Pushbot hardware class to define the drive on the robot.
- * The code is structured as a LinearOpMode
- *
- * The code REQUIRES that you DO have encoders on the wheels,
- *   otherwise you would use: PushbotAutoDriveByTime;
- *
- *  This code ALSO requires that the drive Motors have been configured such that a positive
- *  power command moves them forwards, and causes the encoders to count UP.
- *
- *   The desired path in this example is:
- *   - Drive forward for 48 inches
- *   - Spin right for 12 Inches
- *   - Drive Backwards for 24 inches
- *   - Stop and close the claw.
- *
- *  The code is written using a method called: encoderDrive(speed, leftInches, rightInches, timeoutS)
- *  that performs the actual movement.
- *  This methods assumes that each movement is relative to the last stopping place.
- *  There are other ways to perform encoder based moves, but this method is probably the simplest.
- *  This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
 @Autonomous(name="B1", group="Competition Auto")
 //@Disabled
 public class B1 extends CommonClass {
 
 
-    static final double     DRIVE_SPEED             = 0.3;
+    static final double     DRIVE_SPEED             = 0.2;
     static final double     SLOW_DRIVE_SPEED        = 0.1;
 
-    static final double     TURN_SPEED              = 0.5;
+    static final double     TURN_SPEED              = 0.2;
 
-    static final double     LJS_down                = 0.745;
-    static final double     LJS_up                  = 0.12;
+    static final double     LJS_DOWN                = 0.745;
+    static final double     LJS_UP                  = 0.12;
+    
+    static final double     TIMEOUT                 = 10;
 
-
+    static final double     LIFT_SPEED              = 1;
+    static final long       LIFT_TIME               = 1000;
+    
     // The IMU sensor object
     BNO055IMU imu;
     // State used for updating telemetry
@@ -121,19 +69,8 @@ public class B1 extends CommonClass {
          */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters Parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-        /*
-         * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-         * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-         * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-         * web site at https://developer.vuforia.com/license-manager.
-         *
-         * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-         * random data. As an example, here is a example of a fragment of a valid key:
-         *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-         * Once you've obtained a license key, copy the string from the Vuforia web site
-         * and paste it in to your code onthe next line, between the double quotes.
-         */
+        
+        //License Key
         Parameters.vuforiaLicenseKey = "AZ9bf+//////AAAAGUN72AqPRkmNgnmzA1uEA5gcX4C+jBFFcFfvzH44crjQ/y2qPZEhKrpPs/Swo9Dt+5mVudOkuZmyGAGczv/WWPxhvQncLrqXZMBv5B6aNWi6w1Nr69ixM9lNMmaK88aUUQ17oz8LTXUPyjqulEvRcsoD/+LYrllx3/5TxlucQYKNMdF1xN4Jdp9TVeFk+jHMBLb0EKcc+vThfxW4RyRTimk2xX3xmhz00sewFoX+nb4ydLyBPXjovayEJBYSdavGYuKABz0YdbGa4XBoPMLf5gQlAb5wBYebR2+Pn/Fs72cmeieUP69UulbjSeNcfjwh4m+UhSbhGjBCkn1leCxjUJgE4ldDpIwff+saKq/H0J9Q";
 
         /*
@@ -154,12 +91,6 @@ public class B1 extends CommonClass {
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
 
-
-        //Reference the hardware devices for the code
-
-
-
-
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
@@ -176,24 +107,8 @@ public class B1 extends CommonClass {
         // and named "imu".
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-
-
-        // OR...  Do Not Activate the Camera Monitor View, to save power
-        // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        /*
-         * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-         * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-         * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-         * web site at https://developer.vuforia.com/license-manager.
-         *
-         * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-         * random data. As an example, here is a example of a fragment of a valid key:
-         *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-         * Once you've obtained a license key, copy the string from the Vuforia web site
-         * and paste it in to your code onthe next line, between the double quotes.
-         */
-
+        
+        
         /*
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
@@ -212,30 +127,28 @@ public class B1 extends CommonClass {
         // sometimes it helps to multiply the raw RGB values with a scale factor
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
-
         //------------------------------------------------------------------------------------------
-
-
+        
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
-        robot.FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.flMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.frMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.blMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.brMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         relicTrackables.activate();
         composeTelemetry();
 
         // Wait for the game to start (driver presses PLAY)
-        telemetry.addData(">", "Ready to kick a$$");
+        telemetry.addData(">", "Ready for Battle Sir");
         telemetry.update();
         waitForStart();
         //------------------------------------------------------------------------------------------
@@ -260,9 +173,9 @@ public class B1 extends CommonClass {
                 telemetry.addData("VuMark", "Left");
                 telemetry.update();
 
-                ClampandLift(0.25, 1000);
+                ClampandLift(LIFT_SPEED, LIFT_TIME);
 
-                robot.LJS.setPosition(LJS_down);
+                robot.lJewelServo.setPosition(LJS_DOWN);
                 sleep(250);
                 telemetry.addData("Blue", robot.JSCL.blue());
                 telemetry.addData("Red", robot.JSCL.red());
@@ -275,16 +188,16 @@ public class B1 extends CommonClass {
                 if (BLUE) {
                     telemetry.addData("Blue", "Seen");
                     telemetry.update();
-                    encoderDrive(0.1, 3.5, 3.5, 10);
-                    robot.LJS.setPosition(LJS_up);
-                    encoderDrive(0.1, -3.5, -3.5, 10);
+                    encoderDrive(SLOW_DRIVE_SPEED, 3.5, 3.5, TIMEOUT);
+                    robot.lJewelServo.setPosition(LJS_UP);
+                    encoderDrive(SLOW_DRIVE_SPEED, -3.5, -3.5, TIMEOUT);
                 }
                 else if (RED) {
                     telemetry.addData("Red", "Seen");
                     telemetry.update();
-                    encoderDrive(0.1, -3.5, -3.5, 10);
-                    robot.LJS.setPosition(LJS_up);
-                    encoderDrive(0.1, 3.5, 3.5, 10);
+                    encoderDrive(SLOW_DRIVE_SPEED, -3.5, -3.5, TIMEOUT);
+                    robot.lJewelServo.setPosition(LJS_UP);
+                    encoderDrive(SLOW_DRIVE_SPEED, 3.5, 3.5, TIMEOUT);
                 }
                 else {
                     telemetry.addData("Thou Hath Recieveth", "L");
@@ -293,21 +206,21 @@ public class B1 extends CommonClass {
 
                 sleep(250);
 
-                encoderDrive(0.2, -54, -54, 10);
-                Turn(0.2, -33.5);
-                encoderDrive(0.2, -5, -5, 5);
+                encoderDrive(DRIVE_SPEED, -54, -54, TIMEOUT);
+                Turn(TURN_SPEED, -33.5);
+                encoderDrive(DRIVE_SPEED, -5, -5, 5);
                 Lift(-0.25, 800);
                 OpenClamps();
-                encoderDrive(0.1, -5, -5, 10);
-                encoderDrive(0.1, 2, 2, 10);
+                encoderDrive(SLOW_DRIVE_SPEED, -5, -5, TIMEOUT);
+                encoderDrive(SLOW_DRIVE_SPEED, 2, 2, TIMEOUT);
             }
             else if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 telemetry.addData("VuMark", "Right");
                 telemetry.update();
 
-                ClampandLift(0.25, 1000);
+                ClampandLift(LIFT_SPEED, LIFT_TIME);
 
-                robot.LJS.setPosition(LJS_down);
+                robot.lJewelServo.setPosition(LJS_DOWN);
                 sleep(250);
                 telemetry.addData("Blue", robot.JSCL.blue());
                 telemetry.addData("Red", robot.JSCL.red());
@@ -320,16 +233,16 @@ public class B1 extends CommonClass {
                 if (BLUE) {
                     telemetry.addData("Blue", "Seen");
                     telemetry.update();
-                    encoderDrive(0.1, 3.5, 3.5, 10);
-                    robot.LJS.setPosition(LJS_up);
-                    encoderDrive(0.1, -3.5, -3.5, 10);
+                    encoderDrive(SLOW_DRIVE_SPEED, 3.5, 3.5, TIMEOUT);
+                    robot.lJewelServo.setPosition(LJS_UP);
+                    encoderDrive(SLOW_DRIVE_SPEED, -3.5, -3.5, TIMEOUT);
                 }
                 else if (RED) {
                     telemetry.addData("Red", "Seen");
                     telemetry.update();
-                    encoderDrive(0.1, -3.5, -3.5, 10);
-                    robot.LJS.setPosition(LJS_up);
-                    encoderDrive(0.1, 3.5, 3.5, 10);
+                    encoderDrive(SLOW_DRIVE_SPEED, -3.5, -3.5, TIMEOUT);
+                    robot.lJewelServo.setPosition(LJS_UP);
+                    encoderDrive(SLOW_DRIVE_SPEED, 3.5, 3.5, TIMEOUT);
                 }
                 else {
                     telemetry.addData("Thou Hath Recieveth", "L");
@@ -338,21 +251,21 @@ public class B1 extends CommonClass {
 
                 sleep(250);
 
-                encoderDrive(0.2, -82, -82, 10);
-                Turn(0.2, -33.5);
-                encoderDrive(0.2, -5, -5, 5);
+                encoderDrive(DRIVE_SPEED, -82, -82, TIMEOUT);
+                Turn(TURN_SPEED, -33.5);
+                encoderDrive(DRIVE_SPEED, -5, -5, 5);
                 Lift(-0.25, 800);
                 OpenClamps();
-                encoderDrive(0.1, -5, -5, 10);
-                encoderDrive(0.1, 2, 2, 10);
+                encoderDrive(SLOW_DRIVE_SPEED, -5, -5, TIMEOUT);
+                encoderDrive(SLOW_DRIVE_SPEED, 2, 2, TIMEOUT);
             }
             else if (vuMark == RelicRecoveryVuMark.CENTER) {
                 telemetry.addData("VuMark", "Center");
                 telemetry.update();
 
-                ClampandLift(0.25, 1000);
+                ClampandLift(LIFT_SPEED, LIFT_TIME);
 
-                robot.LJS.setPosition(LJS_down);
+                robot.lJewelServo.setPosition(LJS_DOWN);
                 sleep(250);
                 telemetry.addData("Blue", robot.JSCL.blue());
                 telemetry.addData("Red", robot.JSCL.red());
@@ -365,16 +278,16 @@ public class B1 extends CommonClass {
                 if (BLUE) {
                     telemetry.addData("Blue", "Seen");
                     telemetry.update();
-                    encoderDrive(0.1, 3.5, 3.5, 10);
-                    robot.LJS.setPosition(LJS_up);
-                    encoderDrive(0.1, -3.5, -3.5, 10);
+                    encoderDrive(SLOW_DRIVE_SPEED, 3.5, 3.5, TIMEOUT);
+                    robot.lJewelServo.setPosition(LJS_UP);
+                    encoderDrive(SLOW_DRIVE_SPEED, -3.5, -3.5, TIMEOUT);
                 }
                 else if (RED) {
                     telemetry.addData("Red", "Seen");
                     telemetry.update();
-                    encoderDrive(0.1, -3.5, -3.5, 10);
-                    robot.LJS.setPosition(LJS_up);
-                    encoderDrive(0.1, 3.5, 3.5, 10);
+                    encoderDrive(SLOW_DRIVE_SPEED, -3.5, -3.5, TIMEOUT);
+                    robot.lJewelServo.setPosition(LJS_UP);
+                    encoderDrive(SLOW_DRIVE_SPEED, 3.5, 3.5, TIMEOUT);
                 }
                 else {
                     telemetry.addData("Thou Hath Recieveth", "L");
@@ -383,13 +296,13 @@ public class B1 extends CommonClass {
 
                 sleep(250);
 
-                encoderDrive(0.2, -68, -68, 10);
-                Turn(0.2, -33.5);
-                encoderDrive(0.2, -5, -5, 5);
+                encoderDrive(DRIVE_SPEED, -68, -68, TIMEOUT);
+                Turn(TURN_SPEED, -33.5);
+                encoderDrive(DRIVE_SPEED, -5, -5, 5);
                 Lift(-0.25, 800);
                 OpenClamps();
-                encoderDrive(0.1, -5, -5, 10);
-                encoderDrive(0.1, 2, 2, 10);
+                encoderDrive(SLOW_DRIVE_SPEED, -5, -5, TIMEOUT);
+                encoderDrive(SLOW_DRIVE_SPEED, 2, 2, TIMEOUT);
             }
 
             else {

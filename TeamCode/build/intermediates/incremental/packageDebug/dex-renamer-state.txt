@@ -1,4 +1,4 @@
-#Fri Nov 24 17:58:35 EST 2017
+#Sat Nov 25 14:01:53 EST 2017
 base.0=C\:\\Users\\MonroeBotics\\.AndroidStudio2.1\\ftc_app-master\\TeamCode\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
 renamed.0=classes.dex
 file.0=C\:\\Users\\MonroeBotics\\.AndroidStudio2.1\\ftc_app-master\\TeamCode\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex

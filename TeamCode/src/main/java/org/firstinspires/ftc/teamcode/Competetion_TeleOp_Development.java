@@ -40,6 +40,7 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
+
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
@@ -59,9 +60,8 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
             BR  = gamepad1.left_stick_y + gamepad1.left_stick_x;
 
 
-            if (!robot.digIn .getState() && gamepad2.left_stick_y >= 0) {
+            if (!robot.liftTouch.getState() && gamepad2.left_stick_y >= 0) {
                 LiftMotor = 0;
-                robot.LiftMotor.setMode(DcMotor.RunMode.RESET_ENCODERS);
             }
             else{
                 LiftMotor = gamepad2.left_stick_y;
@@ -132,38 +132,38 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
                 buttonState = true;
             }
 
-            if (buttonState && robot.LiftMotor.getCurrentPosition() <= 20){//change to target {
+            if (buttonState && robot.liftMotor.getCurrentPosition() <= 20){//change to target {
                 LiftMotor = -1;
             }
-            else if (buttonState && robot.LiftMotor.getCurrentPosition() >= 20){
+            else if (buttonState && robot.liftMotor.getCurrentPosition() >= 20){
                 buttonState = false;
                 LiftMotor = 0;
             }
 
 
             if (!gamepad2.right_bumper && gamepad2.a){            //Middle pos
-                robot.TLC.setPosition(0.675);
-                robot.BLC.setPosition(0.52);
-                robot.TRC.setPosition(0.28);
-                robot.BRC.setPosition(0.8);
+                robot.tlClamp.setPosition(0.675);
+                robot.blClamp.setPosition(0.52);
+                robot.trClamp.setPosition(0.28);
+                robot.brClamp.setPosition(0.8);
             }
             if (gamepad2.b){            //OPEN pos
-                robot.TLC.setPosition(0.22);
-                robot.BLC.setPosition(1);
-                robot.TRC.setPosition(0.72);
-                robot.BRC.setPosition(0.4);
+                robot.tlClamp.setPosition(0.22);
+                robot.blClamp.setPosition(1);
+                robot.trClamp.setPosition(0.72);
+                robot.brClamp.setPosition(0.4);
             }
             if (gamepad2.x){            //CLOSE pos
-                robot.TLC.setPosition(0.775);
-                robot.BLC.setPosition(0.43);
-                robot.TRC.setPosition(0.18);
-                robot.BRC.setPosition(0.945);
+                robot.tlClamp.setPosition(0.775);
+                robot.blClamp.setPosition(0.43);
+                robot.trClamp.setPosition(0.18);
+                robot.brClamp.setPosition(0.945);
             }
             if (gamepad2.y){            //Other Mid pos
-                robot.TLC.setPosition(0.625);
-                robot.BLC.setPosition(0.62);
-                robot.TRC.setPosition(0.38);
-                robot.BRC.setPosition(0.7);
+                robot.tlClamp.setPosition(0.625);
+                robot.blClamp.setPosition(0.62);
+                robot.trClamp.setPosition(0.38);
+                robot.brClamp.setPosition(0.7);
             }
 
             /*if (gamepad1.x){
@@ -178,36 +178,39 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
             }
 
 
-
-
             if (gamepad1.dpad_up){
-                robot.GTS.setPosition(0.5);
+                robot.relicGrab.setPosition(1);
             }
             if (gamepad1.dpad_down){
-                robot.GTS.setPosition(0);
+                robot.relicGrab.setPosition(0);
             }
 
             if (gamepad1.x){
-                robot.OGTS.setPosition(0.615);
+                robot.relicLift.setPosition(0.615);
             }
             else if (gamepad1.b){
-                robot.OGTS.setPosition(0.7);
+                robot.relicLift.setPosition(0.7);
             }
             else if (gamepad1.a){
-                robot.OGTS.setPosition(0.66);
+                robot.relicLift.setPosition(0.66);
             }
 
-
+            if (gamepad2.dpad_up){              //Close Gate
+                robot.relicGate.setPosition(1);
+            }
+            else if (gamepad2.dpad_down){       //Open Gate
+                robot.relicGate.setPosition(0.5);
+            }
 
             // Output the safe vales to the motor drives.
-            robot.FL.setPower(FL);
-            robot.FR.setPower(FR);
-            robot.BL.setPower(BL);
-            robot.BR.setPower(BR);
+            robot.flMotor.setPower(FL);
+            robot.frMotor.setPower(FR);
+            robot.blMotor.setPower(BL);
+            robot.brMotor.setPower(BR);
 
-            robot.LiftMotor.setPower(LiftMotor);
+            robot.liftMotor.setPower(LiftMotor);
 
-            robot.RelicMotor.setPower(RelicMotor);
+            robot.relicMotor.setPower(RelicMotor);
 
 
             // Send telemetry message to signify robot running;

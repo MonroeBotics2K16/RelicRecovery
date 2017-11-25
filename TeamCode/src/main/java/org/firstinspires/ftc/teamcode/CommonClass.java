@@ -41,8 +41,8 @@ public class CommonClass extends LinearOpMode {
 
 
     public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
+                              double leftInches, double rightInches,
+                              double timeoutS) {
         int newFLTarget;
         int newFRTarget;
         int newBLTarget;
@@ -52,29 +52,29 @@ public class CommonClass extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newFLTarget = robot.FL.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newFRTarget = robot.FR.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            newBLTarget = robot.BL.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newBRTarget = robot.BR.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newFLTarget = robot.flMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newFRTarget = robot.frMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newBLTarget = robot.blMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newBRTarget = robot.brMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
 
-            robot.FL.setTargetPosition(newFLTarget);
-            robot.FR.setTargetPosition(newFRTarget);
-            robot.BL.setTargetPosition(newBLTarget);
-            robot.BR.setTargetPosition(newBRTarget);
+            robot.flMotor.setTargetPosition(newFLTarget);
+            robot.frMotor.setTargetPosition(newFRTarget);
+            robot.blMotor.setTargetPosition(newBLTarget);
+            robot.brMotor.setTargetPosition(newBRTarget);
 
             // Turn On RUN_TO_POSITION
-            robot.FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.flMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.blMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.brMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.FL.setPower(speed);
-            robot.FR.setPower(speed);
-            robot.BL.setPower(speed);
-            robot.BR.setPower(speed);
+            robot.flMotor.setPower(speed);
+            robot.frMotor.setPower(speed);
+            robot.blMotor.setPower(speed);
+            robot.brMotor.setPower(speed);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -84,34 +84,82 @@ public class CommonClass extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.FL.isBusy() && robot.FR.isBusy() && robot.BL.isBusy() && robot.BR.isBusy())) {
+                    (robot.flMotor.isBusy() && robot.frMotor.isBusy() && robot.blMotor.isBusy() && robot.brMotor.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newFLTarget,  newFRTarget, newBLTarget, newBRTarget);
                 telemetry.addData("Path2",  "Running at %7d :%7d",
-                        robot.FL.getCurrentPosition(),
-                        robot.FR.getCurrentPosition(),
-                        robot.BL.getCurrentPosition(),
-                        robot.BR.getCurrentPosition());
+                        robot.flMotor.getCurrentPosition(),
+                        robot.frMotor.getCurrentPosition(),
+                        robot.blMotor.getCurrentPosition(),
+                        robot.brMotor.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            robot.FL.setPower(0);
-            robot.FR.setPower(0);
-            robot.BL.setPower(0);
-            robot.BR.setPower(0);
+            robot.flMotor.setPower(0);
+            robot.frMotor.setPower(0);
+            robot.blMotor.setPower(0);
+            robot.brMotor.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            robot.FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.flMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.blMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.brMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //  sleep(250);   // optional pause after each move
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+
+    public void encoderLift(double speed,
+                            double inches,
+                            double timeoutS) {
+        int newLiftTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newLiftTarget = robot.liftMotor.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+
+            robot.liftMotor.setTargetPosition(newLiftTarget);
+
+            // Turn On RUN_TO_POSITION
+            robot.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            robot.liftMotor.setPower(speed);
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.liftMotor.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLiftTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+                        robot.liftMotor.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.liftMotor.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
     //----------------------------------------------------------------------------------------------
 
     public void Turn (double speed, double degrees) {
@@ -126,60 +174,60 @@ public class CommonClass extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newFleftTarget = robot.FL.getCurrentPosition() - (int)(degrees * COUNTS_PER_INCH);
-            newFrightTarget = robot.FR.getCurrentPosition() + (int)(degrees * COUNTS_PER_INCH);
-            newBleftTarget = robot.BL.getCurrentPosition() - (int)(degrees * COUNTS_PER_INCH);
-            newBrightTarget = robot.BR.getCurrentPosition() + (int)(degrees * COUNTS_PER_INCH);
+            newFleftTarget = robot.flMotor.getCurrentPosition() - (int)(degrees * COUNTS_PER_INCH);
+            newFrightTarget = robot.frMotor.getCurrentPosition() + (int)(degrees * COUNTS_PER_INCH);
+            newBleftTarget = robot.blMotor.getCurrentPosition() - (int)(degrees * COUNTS_PER_INCH);
+            newBrightTarget = robot.brMotor.getCurrentPosition() + (int)(degrees * COUNTS_PER_INCH);
 
-            robot.FL.setTargetPosition(newFleftTarget);
-            robot.FR.setTargetPosition(newFrightTarget);
-            robot.BL.setTargetPosition(newBleftTarget);
-            robot.BR.setTargetPosition(newBrightTarget);
+            robot.flMotor.setTargetPosition(newFleftTarget);
+            robot.frMotor.setTargetPosition(newFrightTarget);
+            robot.blMotor.setTargetPosition(newBleftTarget);
+            robot.brMotor.setTargetPosition(newBrightTarget);
 
             // Turn On RUN_TO_POSITION
-            robot.FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.flMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.frMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.blMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.brMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.FL.setPower(-speed);
-            robot.FR.setPower(speed);
-            robot.BL.setPower(-speed);
-            robot.BR.setPower(speed);
+            robot.flMotor.setPower(-speed);
+            robot.frMotor.setPower(speed);
+            robot.blMotor.setPower(-speed);
+            robot.brMotor.setPower(speed);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
-                    (robot.FL.isBusy() && robot.FR.isBusy())) {
+                    (robot.flMotor.isBusy() && robot.frMotor.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d :%7d :%7d", newFleftTarget,  newFrightTarget, newBleftTarget, newBrightTarget);
                 telemetry.addData("Path2",  "Running at %7d :%7d :%7d :%7d",
-                        robot.FL.getCurrentPosition(),
-                        robot.FR.getCurrentPosition(),
-                        robot.BL.getCurrentPosition(),
-                        robot.BR.getCurrentPosition());
+                        robot.flMotor.getCurrentPosition(),
+                        robot.frMotor.getCurrentPosition(),
+                        robot.blMotor.getCurrentPosition(),
+                        robot.brMotor.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            robot.FL.setPower(0);
-            robot.FR.setPower(0);
-            robot.BL.setPower(0);
-            robot.BR.setPower(0);
+            robot.flMotor.setPower(0);
+            robot.frMotor.setPower(0);
+            robot.blMotor.setPower(0);
+            robot.brMotor.setPower(0);
 
             //Reset Encoders
-            robot.FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             // Turn off RUN_TO_POSITION
-            robot.FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.flMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.frMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.blMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.brMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(100);   // optional pause after each move
         }
@@ -190,9 +238,9 @@ public class CommonClass extends LinearOpMode {
     //----------------------------------------------------------------------------------------------
 
     public void Lift(double LiftSpeed, long TimeofLift) {
-        robot.LiftMotor.setPower(-LiftSpeed);
+        robot.liftMotor.setPower(-LiftSpeed);
         sleep(TimeofLift);
-        robot.LiftMotor.setPower(0);
+        robot.liftMotor.setPower(0);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -200,27 +248,27 @@ public class CommonClass extends LinearOpMode {
     public void ClampandLift(double LiftSpeed, long TimeofLift) {
         CloseClamps();
         sleep(150);
-        robot.LiftMotor.setPower(-LiftSpeed);
+        robot.liftMotor.setPower(-LiftSpeed);
         sleep(TimeofLift);
-        robot.LiftMotor.setPower(0);
+        robot.liftMotor.setPower(0);
     }
 
     //----------------------------------------------------------------------------------------------
 
     public void OpenClamps() {
-        robot.TLC.setPosition(0.22);
-        robot.BLC.setPosition(1);
-        robot.TRC.setPosition(0.72);
-        robot.BRC.setPosition(0.4);
+        robot.tlClamp.setPosition(0.22);
+        robot.blClamp.setPosition(1);
+        robot.trClamp.setPosition(0.72);
+        robot.brClamp.setPosition(0.4);
     }
 
     //----------------------------------------------------------------------------------------------
 
     public void CloseClamps() {
-        robot.TLC.setPosition(0.775);
-        robot.BLC.setPosition(0.43);
-        robot.TRC.setPosition(0.18);
-        robot.BRC.setPosition(0.945);
+        robot.tlClamp.setPosition(0.775);
+        robot.blClamp.setPosition(0.43);
+        robot.trClamp.setPosition(0.18);
+        robot.brClamp.setPosition(0.945);
     }
 
     //----------------------------------------------------------------------------------------------
