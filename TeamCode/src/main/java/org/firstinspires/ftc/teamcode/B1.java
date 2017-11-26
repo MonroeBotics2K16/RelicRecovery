@@ -177,12 +177,12 @@ public class B1 extends CommonClass {
 
                 robot.lJewelServo.setPosition(LJS_DOWN);
                 sleep(250);
-                telemetry.addData("Blue", robot.JSCL.blue());
-                telemetry.addData("Red", robot.JSCL.red());
+                telemetry.addData("Blue", robot.leftColorSensor.blue());
+                telemetry.addData("Red", robot.leftColorSensor.red());
                 telemetry.update();
                 sleep(250);
-                boolean BLUE = robot.JSCL.blue() > robot.JSCL.red() && robot.JSCL.blue() > robot.JSCL.green();
-                boolean RED = robot.JSCL.red() > robot.JSCL.blue() && robot.JSCL.red() > robot.JSCL.green();
+                boolean BLUE = robot.leftColorSensor.blue() > robot.leftColorSensor.red() && robot.leftColorSensor.blue() > robot.leftColorSensor.green();
+                boolean RED = robot.leftColorSensor.red() > robot.leftColorSensor.blue() && robot.leftColorSensor.red() > robot.leftColorSensor.green();
                 sleep(250);
 
                 if (BLUE) {
@@ -222,12 +222,12 @@ public class B1 extends CommonClass {
 
                 robot.lJewelServo.setPosition(LJS_DOWN);
                 sleep(250);
-                telemetry.addData("Blue", robot.JSCL.blue());
-                telemetry.addData("Red", robot.JSCL.red());
+                telemetry.addData("Blue", robot.leftColorSensor.blue());
+                telemetry.addData("Red", robot.leftColorSensor.red());
                 telemetry.update();
                 sleep(250);
-                boolean BLUE = robot.JSCL.blue() > robot.JSCL.red() && robot.JSCL.blue() > robot.JSCL.green();
-                boolean RED = robot.JSCL.red() > robot.JSCL.blue() && robot.JSCL.red() > robot.JSCL.green();
+                boolean BLUE = robot.leftColorSensor.blue() > robot.leftColorSensor.red() && robot.leftColorSensor.blue() > robot.leftColorSensor.green();
+                boolean RED = robot.leftColorSensor.red() > robot.leftColorSensor.blue() && robot.leftColorSensor.red() > robot.leftColorSensor.green();
                 sleep(250);
 
                 if (BLUE) {
@@ -267,12 +267,12 @@ public class B1 extends CommonClass {
 
                 robot.lJewelServo.setPosition(LJS_DOWN);
                 sleep(250);
-                telemetry.addData("Blue", robot.JSCL.blue());
-                telemetry.addData("Red", robot.JSCL.red());
+                telemetry.addData("Blue", robot.leftColorSensor.blue());
+                telemetry.addData("Red", robot.leftColorSensor.red());
                 telemetry.update();
                 sleep(250);
-                boolean BLUE = robot.JSCL.blue() > robot.JSCL.red() && robot.JSCL.blue() > robot.JSCL.green();
-                boolean RED = robot.JSCL.red() > robot.JSCL.blue() && robot.JSCL.red() > robot.JSCL.green();
+                boolean BLUE = robot.leftColorSensor.blue() > robot.leftColorSensor.red() && robot.leftColorSensor.blue() > robot.leftColorSensor.green();
+                boolean RED = robot.leftColorSensor.red() > robot.leftColorSensor.blue() && robot.leftColorSensor.red() > robot.leftColorSensor.green();
                 sleep(250);
 
                 if (BLUE) {

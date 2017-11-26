@@ -36,8 +36,8 @@ public class Comp_Hardware
     public final double LJS_UP = 0.12;
     public final double RJS_UP = 1;
 
-    ColorSensor JSCL;
-    DistanceSensor JSDL;
+    ColorSensor leftColorSensor;
+    DistanceSensor leftDistanceSensor;
     
     DigitalChannel liftTouch;                // Lift Touch Sensor
 
@@ -83,8 +83,8 @@ public class Comp_Hardware
         relicLift = hwMap.get(Servo.class, "RL");
         relicGate = hwMap.get(Servo.class, "RGa");
 
-        JSCL = hwMap.get(ColorSensor.class, "CDSL");
-        JSDL = hwMap.get(DistanceSensor.class, "CDSL");
+        leftColorSensor = hwMap.get(ColorSensor.class, "CDSL");
+        leftDistanceSensor = hwMap.get(DistanceSensor.class, "CDSL");
 
         liftTouch  = hwMap.get(DigitalChannel.class, "LT");     //  Use generic form of device mapping
         liftTouch.setMode(DigitalChannel.Mode.INPUT);          // Set the direction of each channel

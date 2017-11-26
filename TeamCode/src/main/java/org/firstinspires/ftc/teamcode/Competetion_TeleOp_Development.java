@@ -17,18 +17,15 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        double FL;
-        double FR;
-        double BL;
-        double BR;
-        double drive;
-        double turn;
+        double flMotor;
+        double frMotor;
+        double blMotor;
+        double brMotor;
         double max;
-        double LiftMotor = 0;
-        double Motor;
-        double Liftmax;
-        double RelicMotor;
-        double RelicLift = 0;
+        double liftMotor = 0;
+        double liftMax;
+        double relicMotor;
+        double relicLift = 0;
 
 
         boolean buttonState = false;
@@ -54,77 +51,75 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Combine drive and turn for blended motion.
-            FL  = gamepad1.left_stick_y - gamepad1.left_stick_x;
-            FR  = gamepad1.left_stick_y + gamepad1.left_stick_x;
-            BL  = gamepad1.left_stick_y - gamepad1.left_stick_x;
-            BR  = gamepad1.left_stick_y + gamepad1.left_stick_x;
+            flMotor  = gamepad1.left_stick_y - gamepad1.left_stick_x;
+            frMotor  = gamepad1.left_stick_y + gamepad1.left_stick_x;
+            blMotor  = gamepad1.left_stick_y - gamepad1.left_stick_x;
+            brMotor  = gamepad1.left_stick_y + gamepad1.left_stick_x;
 
 
             if (!robot.liftTouch.getState() && gamepad2.left_stick_y >= 0) {
-                LiftMotor = 0;
+                liftMotor = 0;
             }
             else{
-                LiftMotor = gamepad2.left_stick_y;
+                liftMotor = gamepad2.left_stick_y;
             }
+            
+            relicMotor = gamepad1.right_stick_y;
 
-
-
-            RelicMotor = gamepad1.right_stick_y;
-
-            Liftmax = Math.max(Math.abs(LiftMotor), Math.abs(RelicMotor));
-            if (Liftmax > 1.0)
+            liftMax = Math.max(Math.abs(liftMotor), Math.abs(relicMotor));
+            if (liftMax > 1.0)
             {
-                LiftMotor /= Liftmax;
-                RelicMotor /= Liftmax;
+                liftMotor /= liftMax;
+                relicMotor /= liftMax;
             }
 
             if (!gamepad1.right_bumper) {
-                FL  = gamepad1.left_stick_y - gamepad1.left_stick_x;
-                FR  = gamepad1.left_stick_y + gamepad1.left_stick_x;
-                BL  = gamepad1.left_stick_y - gamepad1.left_stick_x;
-                BR  = gamepad1.left_stick_y + gamepad1.left_stick_x;
+                flMotor  = gamepad1.left_stick_y - gamepad1.left_stick_x;
+                frMotor  = gamepad1.left_stick_y + gamepad1.left_stick_x;
+                blMotor  = gamepad1.left_stick_y - gamepad1.left_stick_x;
+                brMotor  = gamepad1.left_stick_y + gamepad1.left_stick_x;
 
                 // Normalize the values so neither exceed +/- 1.0
-                max = Math.max(Math.abs(FL), Math.abs(FR));
+                max = Math.max(Math.abs(flMotor), Math.abs(frMotor));
                 if (max > 1.0)
                 {
-                    FL /= max;
-                    FR /= max;
+                    flMotor /= max;
+                    frMotor /= max;
                 }
                 // Normalize the values so neither exceed +/- 1.0
-                max = Math.max(Math.abs(BL), Math.abs(BR));
+                max = Math.max(Math.abs(blMotor), Math.abs(brMotor));
                 if (max > 1.0)
                 {
-                    BL /= max;
-                    BR /= max;
+                    blMotor /= max;
+                    brMotor /= max;
                 }
             }
             if (gamepad1.right_bumper) {
-                FL = -gamepad1.right_stick_x;
-                FR = gamepad1.right_stick_x;
-                BL = gamepad1.right_stick_x;
-                BR = -gamepad1.right_stick_x;
+                flMotor = -gamepad1.right_stick_x;
+                frMotor = gamepad1.right_stick_x;
+                blMotor = gamepad1.right_stick_x;
+                brMotor = -gamepad1.right_stick_x;
 
                 // Normalize the values so neither exceed +/- 1.0
-                max = Math.max(Math.abs(FL), Math.abs(FR));
+                max = Math.max(Math.abs(flMotor), Math.abs(frMotor));
                 if (max > 1.0)
                 {
-                    FL /= max;
-                    FR /= max;
+                    flMotor /= max;
+                    frMotor /= max;
                 }
                 // Normalize the values so neither exceed +/- 1.0
-                max = Math.max(Math.abs(BL), Math.abs(BR));
+                max = Math.max(Math.abs(blMotor), Math.abs(brMotor));
                 if (max > 1.0)
                 {
-                    BL /= max;
-                    BR /= max;
+                    blMotor /= max;
+                    brMotor /= max;
                 }
             }
             if (gamepad1.left_bumper) {
-                FL = -gamepad1.left_stick_y;
-                BR = -gamepad1.left_stick_y;
-                FR = gamepad1.right_stick_y;
-                BL = gamepad1.right_stick_y;
+                flMotor = -gamepad1.left_stick_y;
+                brMotor = -gamepad1.left_stick_y;
+                frMotor = gamepad1.right_stick_y;
+                blMotor = gamepad1.right_stick_y;
             }
 
 
@@ -132,12 +127,12 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
                 buttonState = true;
             }
 
-            if (buttonState && robot.liftMotor.getCurrentPosition() <= 20){//change to target {
-                LiftMotor = -1;
+            if (buttonState && robot.liftMotor.getCurrentPosition() >= 99){//change to target {
+                liftMotor = -1;
             }
-            else if (buttonState && robot.liftMotor.getCurrentPosition() >= 20){
+            else if (buttonState && robot.liftMotor.getCurrentPosition() <= 99){
                 buttonState = false;
-                LiftMotor = 0;
+                liftMotor = 0;
             }
 
 
@@ -173,9 +168,6 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
                 robot.RelicGrab.setPosition(0.5);
             }*/
 
-            if (gamepad2.right_bumper){
-                RelicLift = gamepad2.right_stick_y;
-            }
 
 
             if (gamepad1.dpad_up){
@@ -203,19 +195,19 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
             }
 
             // Output the safe vales to the motor drives.
-            robot.flMotor.setPower(FL);
-            robot.frMotor.setPower(FR);
-            robot.blMotor.setPower(BL);
-            robot.brMotor.setPower(BR);
+            robot.flMotor.setPower(flMotor);
+            robot.frMotor.setPower(frMotor);
+            robot.blMotor.setPower(blMotor);
+            robot.brMotor.setPower(brMotor);
 
-            robot.liftMotor.setPower(LiftMotor);
+            robot.liftMotor.setPower(liftMotor);
 
-            robot.relicMotor.setPower(RelicMotor);
+            robot.relicMotor.setPower(relicMotor);
 
 
             // Send telemetry message to signify robot running;
-            telemetry.addData("left", "%.2f", FL);
-            telemetry.addData("right", "%.2f", FR);
+            telemetry.addData("left", "%.2f", flMotor);
+            telemetry.addData("right", "%.2f", frMotor);
             telemetry.update();
 
 

@@ -100,10 +100,7 @@ public class B2 extends CommonClass {
     // State used for updating telemetry
     Orientation angles;
     Acceleration gravity;
-
-    ColorSensor JSCL;
-    DistanceSensor JSDL;
-
+    
     public static final String TAG = "Vuforia VuMark Test";
 
     OpenGLMatrix lastLocation = null;
@@ -260,12 +257,12 @@ public class B2 extends CommonClass {
 
                 robot.lJewelServo.setPosition(LJS_down);
                 sleep(250);
-                telemetry.addData("Blue", JSCL.blue());
-                telemetry.addData("Red", JSCL.red());
+                telemetry.addData("Blue", robot.leftColorSensor.blue());
+                telemetry.addData("Red", robot.leftColorSensor.red());
                 telemetry.update();
                 sleep(250);
-                boolean BLUE = JSCL.blue() > JSCL.red() && JSCL.blue() > JSCL.green();
-                boolean RED = JSCL.red() > JSCL.blue() && JSCL.red() > JSCL.green();
+                boolean BLUE = robot.leftColorSensor.blue() > robot.leftColorSensor.red() && robot.leftColorSensor.blue() > robot.leftColorSensor.green();
+                boolean RED = robot.leftColorSensor.red() > robot.leftColorSensor.blue() && robot.leftColorSensor.red() > robot.leftColorSensor.green();
                 sleep(250);
 
                 if (RED) {
@@ -307,12 +304,12 @@ public class B2 extends CommonClass {
 
                 robot.lJewelServo.setPosition(LJS_down);
                 sleep(250);
-                telemetry.addData("Blue", JSCL.blue());
-                telemetry.addData("Red", JSCL.red());
+                telemetry.addData("Blue", robot.leftColorSensor.blue());
+                telemetry.addData("Red", robot.leftColorSensor.red());
                 telemetry.update();
                 sleep(250);
-                boolean BLUE = JSCL.blue() > JSCL.red() && JSCL.blue() > JSCL.green();
-                boolean RED = JSCL.red() > JSCL.blue() && JSCL.red() > JSCL.green();
+                boolean BLUE = robot.leftColorSensor.blue() > robot.leftColorSensor.red() && robot.leftColorSensor.blue() > robot.leftColorSensor.green();
+                boolean RED = robot.leftColorSensor.red() > robot.leftColorSensor.blue() && robot.leftColorSensor.red() > robot.leftColorSensor.green();
                 sleep(250);
 
                 if (RED) {
@@ -354,12 +351,12 @@ public class B2 extends CommonClass {
 
                 robot.lJewelServo.setPosition(LJS_down);
                 sleep(250);
-                telemetry.addData("Blue", JSCL.blue());
-                telemetry.addData("Red", JSCL.red());
+                telemetry.addData("Blue", robot.leftColorSensor.blue());
+                telemetry.addData("Red", robot.leftColorSensor.red());
                 telemetry.update();
                 sleep(250);
-                boolean BLUE = JSCL.blue() > JSCL.red() && JSCL.blue() > JSCL.green();
-                boolean RED = JSCL.red() > JSCL.blue() && JSCL.red() > JSCL.green();
+                boolean BLUE = robot.leftColorSensor.blue() > robot.leftColorSensor.red() && robot.leftColorSensor.blue() > robot.leftColorSensor.green();
+                boolean RED = robot.leftColorSensor.red() > robot.leftColorSensor.blue() && robot.leftColorSensor.red() > robot.leftColorSensor.green();
                 sleep(250);
 
                 if (RED) {
