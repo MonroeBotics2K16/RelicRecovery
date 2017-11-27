@@ -27,8 +27,9 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
         double relicMotor;
         double relicLift = 0;
 
-
-        boolean buttonState = false;
+        boolean buttonStateB = false;
+        boolean buttonStateA = false;
+        boolean buttonStateY = false;
 
 
         //RJS = hardwareMap.servo.get("RJS");
@@ -122,16 +123,46 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
                 blMotor = gamepad1.right_stick_y;
             }
 
+            //--------------------------------------------------------------------------------------
 
+            //Middle position
             if (gamepad2.right_bumper && gamepad2.b) {
-                buttonState = true;
+                buttonStateB = true;
             }
-
-            if (buttonState && robot.liftMotor.getCurrentPosition() >= 99){//change to target {
+            if (buttonStateB && robot.liftMotor.getCurrentPosition() >= -5800){//change to target {
                 liftMotor = -1;
             }
-            else if (buttonState && robot.liftMotor.getCurrentPosition() <= 99){
-                buttonState = false;
+            else if (buttonStateB && robot.liftMotor.getCurrentPosition() <= -5800){
+                buttonStateB = false;
+                liftMotor = 0;
+            }
+
+            //--------------------------------------------------------------------------------------
+
+            //Low position
+            if (gamepad2.right_bumper && gamepad2.a) {
+                buttonStateA = true;
+            }
+            if (buttonStateA && robot.liftMotor.getCurrentPosition() >= -3000){
+                liftMotor = -1;
+            }
+            else if (buttonStateA && robot.liftMotor.getCurrentPosition() <=-3000){
+                buttonStateA = false;
+                liftMotor = 0;
+            }
+
+            //--------------------------------------------------------------------------------------
+
+            //High postion
+
+            if (gamepad2.right_bumper && gamepad2.y) {
+                buttonStateY = true;
+            }
+            if (buttonStateY && robot.liftMotor.getCurrentPosition() >= -8750) {
+                liftMotor = -1;
+            }
+            else if (buttonStateY && robot.liftMotor.getCurrentPosition() <= -8750) {
+                buttonStateY = false;
                 liftMotor = 0;
             }
 
@@ -142,19 +173,19 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
                 robot.trClamp.setPosition(0.28);
                 robot.brClamp.setPosition(0.8);
             }
-            if (gamepad2.b){            //OPEN pos
+            if (!gamepad2.right_bumper && gamepad2.b){            //OPEN pos
                 robot.tlClamp.setPosition(0.22);
                 robot.blClamp.setPosition(1);
                 robot.trClamp.setPosition(0.72);
                 robot.brClamp.setPosition(0.4);
             }
-            if (gamepad2.x){            //CLOSE pos
+            if (!gamepad2.right_bumper && gamepad2.x){            //CLOSE pos
                 robot.tlClamp.setPosition(0.775);
                 robot.blClamp.setPosition(0.43);
                 robot.trClamp.setPosition(0.18);
                 robot.brClamp.setPosition(0.945);
             }
-            if (gamepad2.y){            //Other Mid pos
+            if (!gamepad2.right_bumper && gamepad2.y){            //Other Mid pos
                 robot.tlClamp.setPosition(0.625);
                 robot.blClamp.setPosition(0.62);
                 robot.trClamp.setPosition(0.38);

@@ -82,8 +82,9 @@ import java.util.Locale;
 public class SupremeB1 extends CommonClass {
 
 
-    static final double     DRIVE_SPEED             = 0.3;
+    static final double     DRIVE_SPEED             = 0.2;
     static final double     SLOW_DRIVE_SPEED        = 0.1;
+    static final double     FAST_DRIVE_SPEED        = 0.3;
 
     static final double     TURN_SPEED              = 0.5;
 
@@ -220,6 +221,8 @@ public class SupremeB1 extends CommonClass {
         robot.blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+//        robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         robot.flMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.blMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -241,6 +244,8 @@ public class SupremeB1 extends CommonClass {
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive()) {
 
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+
 
             /**
              * See if any of the instances of {@link relicTemplate} are currently visible.
@@ -249,13 +254,12 @@ public class SupremeB1 extends CommonClass {
              * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
              */
 
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
 
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 telemetry.addData("VuMark", "Left");
                 telemetry.update();
 
-                ClampandLift(0.25, 1000);
+                ClampandLift(1, 1000);
 
                 robot.lJewelServo.setPosition(LJS_down);
                 sleep(250);
@@ -293,19 +297,20 @@ public class SupremeB1 extends CommonClass {
                 encoderDrive(0.2, -5, -5, 5);
                 Lift(-1, 800);
                 OpenClamps();
-                encoderDrive(0.1, -5, -5, 10);
-                encoderDrive(0.1, -5, -5, 10);
+                encoderDrive(0.1, -8, -8, 10);
+                encoderDrive(0.2, 14, 14, 10);
                 Turn(TURN_SPEED, 33.5);
                 Lift(1, 200);
-                encoderDrive(0.2, 35, 35, 10);
+                encoderDrive(0.2, -35, -35, 10);
                 CloseClamps();
-                Lift(1, 100);
+                sleep(100);
+                Lift(1, 1000);
             }
             else if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 telemetry.addData("VuMark", "Right");
                 telemetry.update();
 
-                ClampandLift(0.25, 1000);
+                ClampandLift(1, 1000);
 
                 robot.lJewelServo.setPosition(LJS_down);
                 sleep(250);
@@ -341,7 +346,7 @@ public class SupremeB1 extends CommonClass {
                 encoderDrive(0.2, -82, -82, 10);
                 Turn(0.2, -33.5);
                 encoderDrive(0.2, -5, -5, 5);
-                Lift(-0.25, 800);
+                Lift(-1, 800);
                 OpenClamps();
                 encoderDrive(0.1, -5, -5, 10);
                 encoderDrive(0.1, 2, 2, 10);
@@ -350,7 +355,7 @@ public class SupremeB1 extends CommonClass {
                 telemetry.addData("VuMark", "Center");
                 telemetry.update();
 
-                ClampandLift(0.25, 1000);
+                ClampandLift(1, 1000);
 
                 robot.lJewelServo.setPosition(LJS_down);
                 sleep(250);
@@ -386,7 +391,7 @@ public class SupremeB1 extends CommonClass {
                 encoderDrive(0.2, -68, -68, 10);
                 Turn(0.2, -33.5);
                 encoderDrive(0.2, -5, -5, 5);
-                Lift(-0.25, 800);
+                Lift(-1, 800);
                 OpenClamps();
                 encoderDrive(0.1, -5, -5, 10);
                 encoderDrive(0.1, 2, 2, 10);
