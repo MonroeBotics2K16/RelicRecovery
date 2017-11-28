@@ -39,7 +39,7 @@ public class Comp_Hardware
     ColorSensor leftColorSensor;
     DistanceSensor leftDistanceSensor;
     
-    DigitalChannel liftTouch;                // Lift Touch Sensor
+    DigitalChannel digin;                // Lift Touch Sensor
 
 
     //public static final double MID_SERVO       =  0.5 ;
@@ -86,8 +86,8 @@ public class Comp_Hardware
         leftColorSensor = hwMap.get(ColorSensor.class, "CDSL");
         leftDistanceSensor = hwMap.get(DistanceSensor.class, "CDSL");
 
-        liftTouch  = hwMap.get(DigitalChannel.class, "LT");     //  Use generic form of device mapping
-        liftTouch.setMode(DigitalChannel.Mode.INPUT);          // Set the direction of each channel
+        digin  = hwMap.get(DigitalChannel.class, "LT");     //  Use generic form of device mapping
+        digin.setMode(DigitalChannel.Mode.INPUT);          // Set the direction of each channel
 
 
         flMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors

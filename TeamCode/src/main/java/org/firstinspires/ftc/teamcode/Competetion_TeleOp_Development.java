@@ -24,7 +24,7 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
         double max;
         double liftMotor = 0;
         double liftMax;
-        double relicMotor;
+        double relicMotor = 0;
         double relicLift = 0;
 
         boolean buttonStateB = false;
@@ -58,14 +58,17 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
             brMotor  = gamepad1.left_stick_y + gamepad1.left_stick_x;
 
 
-            if (!robot.liftTouch.getState() && gamepad2.left_stick_y >= 0) {
+
+            if (robot.digin.getState() && gamepad2.left_stick_y >= 0) {
                 liftMotor = 0;
             }
             else{
                 liftMotor = gamepad2.left_stick_y;
             }
-            
-            relicMotor = gamepad1.right_stick_y;
+
+            if (gamepad1.left_bumper) {
+                relicMotor = gamepad1.right_stick_y;
+            }
 
             liftMax = Math.max(Math.abs(liftMotor), Math.abs(relicMotor));
             if (liftMax > 1.0)
@@ -115,12 +118,6 @@ public class Competetion_TeleOp_Development extends LinearOpMode {
                     blMotor /= max;
                     brMotor /= max;
                 }
-            }
-            if (gamepad1.left_bumper) {
-                flMotor = -gamepad1.left_stick_y;
-                brMotor = -gamepad1.left_stick_y;
-                frMotor = gamepad1.right_stick_y;
-                blMotor = gamepad1.right_stick_y;
             }
 
             //--------------------------------------------------------------------------------------
